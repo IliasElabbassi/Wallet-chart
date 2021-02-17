@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Current Wallet</h2>
+    <div class="row">
+        <table class="six columns">
+            <thead>
+                <tr>
+                    <th>Cryptocurrency</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in datas %}
+                <tr>
+                    <td>{{ data.0 }}</td>
+                    <td>{{ data.1 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Adding a crypto</h2>
+    <form action="/chart/add_crypto" method="POST">
+        <div class="row" id="crypto0">
+            <div class="three columns">
+                <label for="crypto_name">Cryptocurrency</label>
+                <input type="text" placeholder="BTC/BITCOIN" id="crypto_name0" name="crypto_name0">
+            </div>
+            <div class="three columns">
+                <label for="crypto_amount">Amount</label>
+                <input type="text" placeholder="1 or 0.005 (only numbers)" id="crypto_amount0" name="crypto_amount0">
+            </div>
+        </div>
+        <input class="button-primary" type="submit" value="Submit">
+    </form>
+    <button class="button-secondary" id="btn_add">add crypto</button>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        // jquery to add crypto
+        var index = 0
+        console.log("befor : "+index)
+        $(document).ready(function(){
+            $("#btn_add").click(function(){
+                var to_append_to = "#crypto"+index
+                index = index + 1
+                var toAppend = '<div class="row" id="crypto'+index+'" ><div class="three columns"><input type="text" placeholder="BTC/BITCOIN" id="crypto_name'+index+'"  name="crypto_name'+index+'"></div><div class="three columns"><input type="text" placeholder="1 or 0.005 (only numbers)" id="crypto_amount'+index+'"  name="crypto_amount'+index+'"></div></div>'
+
+                $(to_append_to).after(toAppend);
+            });
+        });
+    </script>
+
+{% endblock content %}
+
+{% block footer %}
+<div class="container">
+    <a href="{{ url_for("resetData") }}">Reset my data</a>
+</div>
+{% endblock %}
