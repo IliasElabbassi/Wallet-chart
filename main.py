@@ -3,16 +3,48 @@ import os
 import json
 from hashlib import sha256
 from cryptography.fernet import Fernet 
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-key = os.environ.get('KEY_CHART').encode('UTF-8')
+load_dotenv()
+key = os.getenv('KEY_CHART').encode('UTF-8')
 fernet = Fernet(key)
 
 @app.route('/')
 def index():
     return render_template("front_page.html")
 
+@app.route('/chart')
+def chartFront():
+    # we load the cookie
+    encrypted_cookie = request.cookies.get('chart_data') # string
+    cookie = fernet.decrypt(encrypted_cookie.encode()).decode()
+    json_data = json.loads(cookie) # json object 
+    data_to_pass = []
+    for value in json_data["cryptos"]:
+        data_to_pass.append((value["crypto_name"], value["crypto_amount"], value["price"]))
+        
+    return render_template("index.html", data=data_to_pass)
+
+@app.route('/chart/update/price')
+def updatePrice():
+    # update the price
+    # ...
+    
+    
+    
+    # we load the cookie
+    encrypted_cookie = request.cookies.get('chart_data') # string
+    cookie = fernet.decrypt(encrypted_cookie.encode()).decode()
+    json_data = json.loads(cookie) # json object 
+    data_to_pass = []
+    for value in json_data["cryptos"]:
+        data_to_pass.append((value["crypto_name"], value["crypto_amount"], value["price"]))
+        
+    #return render_template("index.html", data=data_to_pass)
+    return "in update price"
+    
 @app.route('/chart/add_crypto', methods=['GET', 'POST'])
 def add_crypto():
     # if the cookie is not created create it
@@ -88,7 +120,7 @@ def setcookie():
     
     return resp
 
-@app.route('/chart')
+@app.route('/chart2')
 def chart():
     # load cookie
     # load coinmarketcap price fro each crypto
@@ -99,6 +131,7 @@ def chart():
 @app.route('/data/reset')
 def resetData():
     data = '{ "cryptos": [] }'
+    encoded = fernet.encrypt(data.encode()) # we encrypt it
     
     data_temp = json.loads(data)
     data_to_pass = []
@@ -106,7 +139,7 @@ def resetData():
         data_to_pass.append((value["crypto_name"], value["crypto_amount"]))
         
     resp = make_response(render_template("add_crypto.html", datas=data_to_pass))
-    resp.set_cookie('chart_data', data)
+    resp.set_cookie('chart_data', encoded)
     
     return resp
 

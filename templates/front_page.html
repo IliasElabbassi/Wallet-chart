@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    <h1>Wallet-Chart</h1>
-</div>
+
 <div class="row">
     <p>
         Monitor Your wallet, thanks to us. <br/>
@@ -11,5 +9,16 @@
         Note that this website need cookies to utilise it. <br />
         We do not own your data, everything is stored and encrypted inside your computer. <br />
     </p>
+</div>
+
+<div class="row">
+    <a href="http://127.0.0.1:50/chart">/chart</a><br />
+    <a href="http://127.0.0.1:50/chart/update/price">/chart/update/price</a><br />
+    <a href="http://127.0.0.1:50/chart/add_crypto">/chart/add_crypto</a><br />
+    <a href="http://127.0.0.1:50/getcookie">/getcookie</a><br />
+    <a href="http://127.0.0.1:50/setcookie">/setcookie</a><br />
+    <a href="http://127.0.0.1:50/data/reset">/data/reset</a><br />
+    <a href="http://127.0.0.1:50/test_format">/test_format</a><br />
+    <a href="http://127.0.0.1:50/chart2">/chart2</a><br />
 </div>
 {% endblock %}
